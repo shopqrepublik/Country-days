@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Шенген — семейный план 90/180</title>
+<style>
+:root{--ink:#1c2b3a;--ink-soft:#5a6d80;--paper:#f6f2e7;--line:#d8cfb8;--red:#a83c2e;--red-bg:#f6e3df;--green:#2f6d52;--green-bg:#e2ede6;--a:#2f5f8a;--a-bg:#e4edf5;--b:#8a4a2f;--b-bg:#f5ebe2;--both:#2f6d52;--gap:#a83c2e;--radius:12px;--radius-lg:16px;--serif:Georgia,'Times New Roman',serif;--mono:'SFMono-Regular',Consolas,'Liberation Mono',monospace;--sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--shadow:0 4px 24px rgba(28,43,58,.08);--shadow-lg:0 8px 40px rgba(28,43,58,.12)}
+*{box-sizing:border-box}body{margin:0;font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 20px 80px}
+.masthead{display:flex;justify-content:space-between;gap:16px;border-bottom:2.5px solid var(--ink);padding-bottom:16px;margin-bottom:24px;flex-wrap:wrap}
+.masthead h1{font-family:var(--serif);font-weight:700;font-size:26px;margin:0;line-height:1.1}.masthead h1 small{display:block;font-weight:400;color:var(--ink-soft);font-size:13px;margin-top:6px;font-family:var(--mono);letter-spacing:.3px}
+.masthead .sub{font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:1.5px;margin-top:6px}
+.controls-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.today-box{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;box-shadow:var(--shadow)}
+.today-box input{font-family:var(--mono);font-size:16px;border:none;background:transparent;font-weight:600;min-height:36px;-webkit-appearance:auto;appearance:auto}
+.badge-v2{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:20px;background:var(--ink);color:#fff}
+.people{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}@media(max-width:800px){.people{grid-template-columns:1fr}}
+.person-card{background:#fffdf8;border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;box-shadow:var(--shadow);overflow:hidden}
+.person-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px}.person-card.a::before{background:var(--a)}.person-card.b::before{background:var(--b)}
+.name-row{display:flex;align-items:center;gap:10px;margin:8px 0 14px}.name-row input{font-family:var(--serif);font-weight:600;font-size:19px;border:none;border-bottom:1.5px dashed var(--line);background:transparent;padding:2px 4px;width:100%}
+.badge{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600}.a .badge{background:var(--a-bg);color:var(--a)}.b .badge{background:var(--b-bg);color:var(--b)}
+.trips{margin-bottom:12px;max-height:260px;overflow:auto}.trip-row{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:8px;align-items:center}.trip-row input{font-family:var(--mono);font-size:16px;border:1px solid var(--line);border-radius:8px;padding:10px 8px;background:#fff;min-height:44px;width:100%;touch-action:manipulation;-webkit-appearance:auto;appearance:auto}.trip-row input.empty{border-style:dashed;color:var(--ink-soft)}.trip-row .rm{background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:4px 8px;border-radius:8px}.trip-row .hint{font-size:10px;color:var(--ink-soft);font-family:var(--mono);grid-column:1/-1;margin-top:-2px}
+.add-trip{font-family:var(--mono);font-size:11px;background:#fff;border:1.5px dashed var(--ink-soft);color:var(--ink-soft);padding:8px 12px;border-radius:8px;cursor:pointer;width:100%;text-transform:uppercase;font-weight:600}
+.stats{margin-top:14px;border-top:1px solid var(--line);padding-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat .label{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.7px;font-weight:600}.stat .value{font-family:var(--mono);font-size:18px;font-weight:700}.stat .value.warn{color:var(--red)}.stat .value.ok{color:var(--green)}.stat.full{grid-column:1/-1}.stat .hint{font-size:11px;color:var(--ink-soft);line-height:1.3}
+.section-title{font-family:var(--serif);font-weight:700;font-size:22px;margin:36px 0 14px;padding-bottom:10px;border-bottom:1.5px solid var(--line);display:flex;gap:10px;align-items:center}.section-title .icon{width:32px;height:32px;border-radius:8px;background:var(--ink);color:#fff;display:grid;place-items:center}
+.panel{background:#fffdf8;border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:20px;box-shadow:var(--shadow)}.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:800px){.row2{grid-template-columns:1fr}}
+.field label{font-size:11px;color:var(--ink-soft);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.6px;font-weight:600}.field input,.field select{font-family:var(--mono);font-size:13px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;background:#fff}
+.result-line{display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;padding:8px 0;border-bottom:1px dotted var(--line)}.result-line .n{font-weight:700}
+.together-stats{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:18px}.together-stats .big{font-family:var(--serif);font-weight:700;font-size:32px;color:var(--green);line-height:1}.together-stats .small{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-top:4px}
+.warn-box{background:var(--red-bg);border:1px solid var(--red);border-radius:12px;padding:14px 16px;margin-bottom:12px}.warn-box .t{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.7px;text-transform:uppercase;margin-bottom:6px;font-weight:700}.warn-box .d{font-size:13px;line-height:1.5}.ok-box{background:var(--green-bg);border:1px solid var(--green);border-radius:12px;padding:14px 16px;margin-bottom:12px;font-size:13px;line-height:1.5}.info-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;font-size:13px;line-height:1.65}
+.plan-btn{font-family:var(--sans);font-size:13px;font-weight:700;background:var(--ink);color:#fff;border:none;padding:11px 18px;border-radius:8px;cursor:pointer;transition:.15s}.plan-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}.plan-btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}.plan-btn:disabled{opacity:.5;cursor:not-allowed}
+.ai-header{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
+.timeline-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:18px 0;overflow:auto}.timeline-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;font-family:var(--mono);margin-bottom:14px}.legend-item{display:flex;align-items:center;gap:6px}.legend-dot{width:12px;height:8px;border-radius:3px;display:inline-block}
+.timeline-row{position:relative;height:36px;margin-bottom:10px;background:#fbf8f0;border-radius:8px;border:1px solid #eee;overflow:hidden}.timeline-row .row-label{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;font-weight:700;z-index:2;background:rgba(255,255,255,.9);padding:2px 6px;border-radius:4px}.timeline-bar{position:absolute;top:6px;bottom:6px;border-radius:6px;font-family:var(--mono);font-size:10px;font-weight:700;color:#fff;overflow:hidden}.bar-a{background:var(--a)}.bar-b{background:var(--b)}.bar-both{background:var(--both);z-index:1}.bar-gap{background:var(--gap);background:repeating-linear-gradient(45deg,var(--gap),var(--gap) 8px,#c25a4d 8px,#c25a4d 16px)}
+.timeline-axis{position:relative;height:20px;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--ink-soft)}.axis-tick{position:absolute;top:0;transform:translateX(-50%)}
+.explain h4{font-family:var(--serif);font-size:16px;margin:0 0 8px}.explain ul{margin:0;padding-left:18px;font-size:13px;line-height:1.6}.proposal{border-left:3px solid var(--ink);padding:10px 14px;margin:10px 0;background:#fff;border-radius:0 10px 10px 0}
+
+.human-result{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:18px;margin:18px 0;font-family:var(--mono);font-size:13px;line-height:1.7;white-space:pre-wrap}
+.backup-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 22px}
+.backup-status{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-left:auto}
+@media(max-width:800px){.backup-status{width:100%;margin-left:0}}
+
+.cloud-pill{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:20px;background:#fff;border:1px solid var(--line);color:var(--ink-soft)}
+.cloud-pill.ok{color:var(--green);border-color:var(--green)}.cloud-pill.err{color:var(--red);border-color:var(--red)}
+.pin-gate{position:fixed;inset:0;z-index:9999;background:rgba(28,43,58,.86);display:grid;place-items:center;padding:20px;backdrop-filter:blur(5px)}
+.pin-card{width:min(420px,100%);background:#fffdf8;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow-lg)}
+.pin-card h2{font-family:var(--serif);margin:0 0 8px;font-size:25px}.pin-card p{font-size:13px;color:var(--ink-soft);margin:0 0 16px}
+.pin-card input{width:100%;font-family:var(--mono);font-size:18px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:10px}
+.pin-card .pin-error{min-height:20px;color:var(--red);font-size:12px;margin-top:8px}.pin-card .plan-btn{width:100%}
+</style>
+
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#f6f2e7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Schengen">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="pin-gate" id="pinGate">
+  <div class="pin-card">
+    <h2>Семейный доступ</h2>
+    <p>Введите общий PIN. Он проверяется в Supabase и запоминается только на этом устройстве.</p>
+    <input id="familyPin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="PIN">
+    <button class="plan-btn" id="unlockBtn">Открыть</button>
+    <div class="pin-error" id="pinError"></div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="masthead">
+    <div>
+      <h1>Шенген <small>Лена + Саша • 90/180 • локальное сохранение + общая синхронизация</small></h1>
+      <div class="sub">PWA • общие данные на двух устройствах • локальный backup • работает офлайн</div>
+    </div>
+    <div class="controls-top">
+      <div class="today-box">сегодня <input type="date" id="todayInput"></div>
+      <div class="badge-v2">PWA • OFFLINE • localStorage</div>
+    </div>
+  </div>
+
+  <div class="backup-bar">
+    <button class="plan-btn secondary" id="backupBtn">↓ Скачать backup JSON</button>
+    <button class="plan-btn secondary" id="restoreBtn">↻ Восстановить JSON</button>
+    <input type="file" id="restoreFile" accept=".json,application/json" style="display:none">
+    <div class="cloud-pill" id="cloudStatus">☁ не подключено</div><div class="backup-status" id="backupStatus">Автосохранение включено</div>
+  </div>
+
+  <div class="people">
+    <div class="person-card a" id="cardA">
+      <div class="name-row"><input type="text" id="nameA" value="Лена"><span class="badge">Лена • приоритет</span></div>
+      <div class="trips" id="tripsA"></div>
+      <button class="add-trip" data-person="A">+ поездка</button>
+      <div class="stats" id="statsA"></div>
+    </div>
+    <div class="person-card b" id="cardB">
+      <div class="name-row"><input type="text" id="nameB" value="Саша"><span class="badge">Саша • жертвуем</span></div>
+      <div class="trips" id="tripsB"></div>
+      <button class="add-trip" data-person="B">+ поездка</button>
+      <div class="stats" id="statsB"></div>
+    </div>
+  </div>
+
+  <div class="section-title"><span class="icon">◎</span> Оптимальный семейный план — глобальный поиск</div>
+  <div class="panel">
+    <div class="ai-header">
+      <div class="field" style="min-width:140px"><label>Горизонт прогноза</label><select id="horizonSelect"><option value="90">90 дней</option><option value="180" selected>180 дней</option><option value="365">365 дней</option></select></div>
+      <div class="field" style="min-width:180px"><label>Правило жертвы (при Both невозможно)</label><select id="sacrificeSelect"><option value="B" selected>Жертвуем Сашей — Лена max</option><option value="A">Жертвуем Леной — Саша max</option><option value="auto">Авто — минимум потерь</option></select></div>
+      <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+        <button class="plan-btn" id="optimizeBtn">Найти оптимальный план</button>
+        <button class="plan-btn secondary" id="exportBtn">Экспорт .ics</button>
+        <button class="plan-btn secondary" id="explainBtn">Объяснить план</button>
+      </div>
+    </div>
+
+    <div id="searchStatus" style="font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin:12px 0"></div>
+
+    <div id="humanResult" class="human-result" style="display:none"></div>
+
+    <div id="nextActions" class="human-result" style="display:none"></div>
+
+    <div class="timeline-wrap">
+      <div class="timeline-legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--a)"></span> <span id="legendA">Лена</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--b)"></span> <span id="legendB">Саша</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--both)"></span> Вместе</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--gap)"></span> Оба вне — запрещено</div>
+      </div>
+      <div id="timeline"></div>
+      <div class="timeline-axis" id="timelineAxis"></div>
+    </div>
+
+    <div id="forecastWarnings"></div>
+    <div id="forecastSummary" class="together-stats" style="margin-top:12px"></div>
+    <div id="forecastExplain" class="explain"></div>
+    <div class="row2" style="margin-top:16px"><div id="forecastTimelinesA"></div><div id="forecastTimelinesB"></div></div>
+  </div>
+
+  <div class="info-box">
+    <b>Как считается 90/180 теперь:</b> для каждого календарного дня D считается <code>used = overlap(все прошлые фиксированные поездки, [D-179,D]) + количество будущих дней присутствия в этом же окне</code>. Никаких эвристик — проверка на каждый день. Пустой выезд = поездка до сегодня включительно. Будущие поездки с датами — обязательные (hard). Открытая поездка с будущим стартом и пустым выездом = обязательная с start до конца горизонта.
+  </div>
+</div>
+
+<script>
+// ---------- utils ----------
+function todayISO(){const d=new Date();const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,'0');const day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function toDayNum(iso){if(!iso)return null;const[y,m,day]=iso.split('-').map(Number);if(!y||!m||!day)return null;return Math.floor(Date.UTC(y,m-1,day)/86400000)}
+function fromDayNum(n){const d=new Date(n*86400000);return d.toISOString().slice(0,10)}
+function fmtHuman(n){const d=new Date(n*86400000);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'long',year:'numeric'})}
+function fmtHumanShort(n){const d=new Date(n*86400000);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'})}
+function fmtDMY(n){const d=new Date(n*86400000);const dd=String(d.getUTCDate()).padStart(2,'0');const mm=String(d.getUTCMonth()+1).padStart(2,'0');const yy=d.getUTCFullYear();return `${dd}.${mm}.${yy}`}
+function overlap(s1,e1,s2,e2){return Math.max(0,Math.min(e1,e2)-Math.max(s1,s2)+1)}
+function mergeTrips(trips){if(!trips.length)return[];const a=trips.slice().sort((x,y)=>x.start-y.start);const out=[{...a[0]}];for(let i=1;i<a.length;i++){const cur=a[i],last=out[out.length-1];if(cur.start<=last.end+1){last.end=Math.max(last.end,cur.end)}else out.push({...cur})}return out}
+function usedInWindow(trips,windowEnd){const ws=windowEnd-179;let sum=0;for(const t of trips){sum+=overlap(t.start,t.end,ws,windowEnd)}return sum}
+function computeMaxExit(background,entryDay){let cur=entryDay,guard=0;while(guard<2000){guard++;const test=mergeTrips(background.concat([{start:entryDay,end:cur}]));const used=usedInWindow(test,cur);if(used>90)return cur-1;cur++}return cur-1}
+function canEnterOn(background,day){return usedInWindow(mergeTrips(background.concat([{start:day,end:day}])),day)<=90}
+function pastTripsBefore(trips,refDay){return mergeTrips(trips.filter(t=>t.start<refDay).map(t=>({start:t.start,end:Math.min(t.end,refDay-1)})).filter(t=>t.end>=t.start))}
+
+// ---------- state with localStorage + JSON backup ----------
+const APP_VERSION='PWA-1.0';
+const LS_KEY='schengen-v3-lena-sasha';
+
+function nowISO(){ return new Date().toISOString(); }
+
+let state={
+  today: todayISO(),
+  A:{name:'Лена',trips:[]},
+  B:{name:'Саша',trips:[]},
+  settings:{horizon:'180', sacrifice:'B'},
+  lastModified:null
+};
+
+function touchState(){
+  state.lastModified=nowISO();
+}
+
+function loadState(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(raw){
+      const parsed=JSON.parse(raw);
+      if(parsed.A){state.A.name=parsed.A.name||'Лена'; state.A.trips=Array.isArray(parsed.A.trips)?parsed.A.trips:[];}
+      if(parsed.B){state.B.name=parsed.B.name||'Саша'; state.B.trips=Array.isArray(parsed.B.trips)?parsed.B.trips:[];}
+      if(parsed.settings){
+        state.settings.horizon=String(parsed.settings.horizon||'180');
+        state.settings.sacrifice=parsed.settings.sacrifice||'B';
+      }
+      state.lastModified=parsed.lastModified||null;
+      if(!state.A.trips.length && !state.B.trips.length){
+        state.A.trips=[{start:'2026-03-16',end:'2026-03-21'},{start:'2026-07-25',end:''}];
+        touchState();
+      }
+      return true;
+    }
+  }catch(e){console.warn('ls load fail',e)}
+  state.A.trips=[{start:'2026-03-16',end:'2026-03-21'},{start:'2026-07-25',end:''}];
+  state.B.trips=[];
+  state.today=todayISO();
+  touchState();
+  return false;
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      A:state.A,
+      B:state.B,
+      settings:state.settings,
+      lastModified:state.lastModified
+    }));
+    updateBackupStatus();
+    if(typeof scheduleCloudSave==='function') scheduleCloudSave();
+  }catch(e){console.warn('ls save fail',e)}
+}
+
+function updateBackupStatus(extra=''){
+  const el=document.getElementById('backupStatus');
+  if(!el) return;
+  let stamp='ещё нет';
+  if(state.lastModified){
+    const d=new Date(state.lastModified);
+    if(!isNaN(d)) stamp=d.toLocaleString('ru-RU');
+  }
+  el.textContent=(extra?extra+' • ':'')+'последнее изменение: '+stamp;
+}
+
+function makeBackupPayload(){
+  return {
+    schema:'schengen-family-planner-backup',
+    schemaVersion:1,
+    appVersion:APP_VERSION,
+    savedAt:nowISO(),
+    todayAtExport:state.today,
+    data:{
+      A:state.A,
+      B:state.B,
+      settings:{
+        horizon:String(document.getElementById('horizonSelect').value),
+        sacrifice:document.getElementById('sacrificeSelect').value
+      },
+      lastModified:state.lastModified
+    }
+  };
+}
+
+function downloadBackup(){
+  state.settings.horizon=String(document.getElementById('horizonSelect').value);
+  state.settings.sacrifice=document.getElementById('sacrificeSelect').value;
+  saveState();
+
+  const payload=makeBackupPayload();
+  const json=JSON.stringify(payload,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const stamp=(new Date()).toISOString().slice(0,10);
+  a.href=url;
+  a.download=`Schengen-data-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  updateBackupStatus('копия подготовлена');
+}
+
+function isValidPerson(obj){
+  return obj && typeof obj==='object' && typeof obj.name==='string' && Array.isArray(obj.trips) &&
+    obj.trips.every(t=>t && typeof t==='object' && typeof (t.start??'')==='string' && typeof (t.end??'')==='string');
+}
+
+async function restoreBackupFile(file){
+  try{
+    const raw=await file.text();
+    const parsed=JSON.parse(raw);
+    if(parsed.schema!=='schengen-family-planner-backup' || !parsed.data){
+      throw new Error('Это не файл резервной копии Schengen Planner');
+    }
+    const data=parsed.data;
+    if(!isValidPerson(data.A) || !isValidPerson(data.B)){
+      throw new Error('Повреждены данные поездок');
+    }
+
+    state.A={name:data.A.name||'Лена', trips:data.A.trips};
+    state.B={name:data.B.name||'Саша', trips:data.B.trips};
+    state.settings={
+      horizon:String(data.settings?.horizon||'180'),
+      sacrifice:data.settings?.sacrifice||'B'
+    };
+    state.lastModified=data.lastModified||parsed.savedAt||nowISO();
+
+    document.getElementById('nameA').value=state.A.name;
+    document.getElementById('nameB').value=state.B.name;
+    document.getElementById('horizonSelect').value=state.settings.horizon;
+    document.getElementById('sacrificeSelect').value=state.settings.sacrifice;
+    state.today=todayISO();
+    document.getElementById('todayInput').value=state.today;
+document.getElementById('horizonSelect').value=state.settings.horizon||'180';
+document.getElementById('sacrificeSelect').value=state.settings.sacrifice||'B';
+updateBackupStatus();
+
+    saveState();
+    renderAll();
+    document.getElementById('legendA').textContent=state.A.name;
+    document.getElementById('legendB').textContent=state.B.name;
+    updateBackupStatus('данные восстановлены');
+    setTimeout(runOptimization,100);
+  }catch(err){
+    alert('Не удалось загрузить резервную копию: '+err.message);
+  }
+}
+
+loadState();
+// При каждом запуске рабочая дата = реальная текущая дата.
+// В backup она записывается только справочно как todayAtExport.
+state.today=todayISO();
+
+
+// ---------- Supabase shared family sync ----------
+const SUPABASE_URL='https://okaogvrzwmrzovlvbdbm.supabase.co';
+const SUPABASE_KEY='sb_publishable_9ZNoSg1EAjh6H1q75z7DRw_ocxGiLPf';
+const PIN_KEY='schengen-family-pin';
+let cloudReady=false;
+let cloudPin='';
+let cloudSaveTimer=null;
+let applyingRemote=false;
+
+function setCloudStatus(text, kind=''){
+  const el=document.getElementById('cloudStatus');
+  if(!el) return;
+  el.textContent=text;
+  el.className='cloud-pill'+(kind?' '+kind:'');
+}
+async function rpc(name, payload){
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`,{
+    method:'POST',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+  let data=null; const raw=await res.text();
+  try{data=raw?JSON.parse(raw):null}catch(_){data=raw}
+  if(!res.ok){
+    const msg=(data && (data.message||data.error_description)) || `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+  return data;
+}
+function exportCloudState(){
+  return {A:state.A,B:state.B,settings:state.settings,lastModified:state.lastModified};
+}
+function applyCloudState(s){
+  if(!s || !s.A || !s.B) return false;
+  applyingRemote=true;
+  state.A={name:s.A.name||'Лена', trips:Array.isArray(s.A.trips)?s.A.trips:[]};
+  state.B={name:s.B.name||'Саша', trips:Array.isArray(s.B.trips)?s.B.trips:[]};
+  state.settings={horizon:String(s.settings?.horizon||'180'), sacrifice:s.settings?.sacrifice||'B'};
+  state.lastModified=s.lastModified||nowISO();
+  state.today=todayISO();
+  document.getElementById('nameA').value=state.A.name;
+  document.getElementById('nameB').value=state.B.name;
+  document.getElementById('todayInput').value=state.today;
+  document.getElementById('horizonSelect').value=state.settings.horizon;
+  document.getElementById('sacrificeSelect').value=state.settings.sacrifice;
+  renderAll();
+  document.getElementById('legendA').textContent=state.A.name;
+  document.getElementById('legendB').textContent=state.B.name;
+  applyingRemote=false;
+  return true;
+}
+async function pullCloudIfNewer(){
+  if(!cloudReady || !cloudPin || applyingRemote) return false;
+  try{
+    const remote=await rpc('family_state_get',{p_pin:cloudPin});
+    const remoteState=remote && remote.state;
+    if(!remoteState) return false;
+    const remoteTime=remoteState.lastModified ? Date.parse(remoteState.lastModified) : 0;
+    const localTime=state.lastModified ? Date.parse(state.lastModified) : 0;
+    if(remoteTime>localTime){
+      applyCloudState(remoteState);
+      try{localStorage.setItem(LS_KEY,JSON.stringify({A:state.A,B:state.B,settings:state.settings,lastModified:state.lastModified}))}catch(_){}
+      updateBackupStatus('обновлено с другого устройства');
+      setCloudStatus('☁ получены новые данные','ok');
+      return true;
+    }
+    return false;
+  }catch(e){
+    console.warn('cloud pull',e);
+    return false;
+  }
+}
+async function saveToCloud(){
+  if(!cloudReady || !cloudPin || applyingRemote) return;
+  try{
+    setCloudStatus('☁ сохраняю…');
+    // Before writing, do not overwrite a newer edit from the second device.
+    if(await pullCloudIfNewer()) return;
+    await rpc('family_state_save',{p_pin:cloudPin,p_state:exportCloudState()});
+    setCloudStatus('☁ синхронизировано','ok');
+  }catch(e){
+    console.warn('cloud save',e); setCloudStatus('☁ ошибка','err');
+  }
+}
+function scheduleCloudSave(){
+  if(!cloudReady || applyingRemote) return;
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer=setTimeout(saveToCloud,700);
+}
+async function unlockCloud(pin){
+  pin=String(pin||'').trim();
+  if(!pin) throw new Error('Введите PIN');
+  setCloudStatus('☁ подключение…');
+  const remote=await rpc('family_state_get',{p_pin:pin});
+  cloudPin=pin; cloudReady=true; localStorage.setItem(PIN_KEY,pin);
+  const remoteState=remote && remote.state;
+  const remoteTime=remoteState?.lastModified ? Date.parse(remoteState.lastModified) : 0;
+  const localTime=state.lastModified ? Date.parse(state.lastModified) : 0;
+  if(remoteState && remoteTime>localTime){
+    applyCloudState(remoteState);
+  }else if(!remoteState || localTime>=remoteTime){
+    await saveToCloud();
+  }
+  setCloudStatus('☁ синхронизировано','ok');
+  document.getElementById('pinGate').style.display='none';
+  setTimeout(runOptimization,100);
+}
+
+
+// Keep an already-open second device reasonably fresh without manual reload.
+setInterval(()=>{ if(cloudReady && document.visibilityState==='visible') pullCloudIfNewer(); },15000);
+document.addEventListener('visibilitychange',()=>{ if(cloudReady && document.visibilityState==='visible') pullCloudIfNewer(); });
+window.addEventListener('focus',()=>{ if(cloudReady) pullCloudIfNewer(); });
+
+// ---------- parsing with open trip support ----------
+function parseTripsForPerson(person, todayDay, horizonEnd){
+  // returns {fixedIntervals, mandatoryIntervals, isPresentToday, rawParsed}
+  const trips=state[person].trips;
+  const fixed=[]; // up to today inclusive
+  const mandatory=[]; // future mandatory
+  let isPresentToday=false;
+  for(const t of trips){
+    const s=toDayNum(t.start);
+    if(s===null) continue;
+    const e=t.end ? toDayNum(t.end) : null;
+    if(e!==null && e < s) continue;
+    if(s <= todayDay){
+      const fixedEnd = e===null ? todayDay : Math.min(e, todayDay);
+      if(fixedEnd >= s){
+        fixed.push({start:s,end:fixedEnd});
+        if(fixedEnd >= todayDay && s <= todayDay) isPresentToday=true;
+      }
+      if(e!==null && e > todayDay){
+        // future part of a trip that started in past and ends in future -> mandatory
+        mandatory.push({start: todayDay+1, end: e});
+      }
+      // if e===null -> open, no mandatory future, only fixed up to today
+    }else{
+      // s > today -> entirely future
+      if(e===null){
+        // open future -> mandatory from s to horizonEnd
+        mandatory.push({start:s, end:horizonEnd});
+      }else{
+        mandatory.push({start:s, end:e});
+      }
+    }
+  }
+  return {
+    fixedIntervals: mergeTrips(fixed),
+    mandatoryIntervals: mergeTrips(mandatory),
+    isPresentToday,
+    raw: trips
+  };
+}
+function getRawTripsForStats(person){
+  // for stats we need to include open trips as up to today
+  const todayDay=toDayNum(state.today);
+  const trips=state[person].trips.map(t=>{
+    const s=toDayNum(t.start);
+    if(s===null) return null;
+    const e=t.end ? toDayNum(t.end) : todayDay; // open -> today
+    if(e===null) return null;
+    if(e < s) return null;
+    return {start:s,end:e};
+  }).filter(Boolean);
+  return mergeTrips(trips);
+}
+
+// ---------- stats ----------
+function renderTrips(p){
+  const el=document.getElementById('trips'+p);
+  el.innerHTML='';
+  state[p].trips.forEach((t,i)=>{
+    const row=document.createElement('div');row.className='trip-row';
+    const endVal=t.end||'';
+    const isOpen=!t.end;
+    row.innerHTML=`
+      <input type="date" data-person="${p}" data-idx="${i}" data-field="start" value="${t.start}" title="въезд">
+      <input type="date" data-person="${p}" data-idx="${i}" data-field="end" value="${endVal}" class="${isOpen?'empty':''}" title="${isOpen?'открытая поездка — сейчас в Шенгене (пустой выезд)':'выезд'}">
+      <button class="rm" data-person="${p}" data-idx="${i}">×</button>
+      ${isOpen?`<div class="hint">пустой выезд = сейчас в Шенгене • ${t.start?fmtDMY(toDayNum(t.start))+' → сейчас':''}</div>`:''}
+    `;
+    el.appendChild(row);
+  });
+}
+function renderStats(p){
+  const todayDay=toDayNum(state.today);
+  const merged=getRawTripsForStats(p);
+  const used=usedInWindow(merged, todayDay);
+  const inSchengen=merged.some(t=>todayDay>=t.start && todayDay<=t.end);
+  let maxExitDay=null, maxExitStr='—', remaining=0;
+  if(inSchengen){
+    const entry=merged.find(t=>todayDay>=t.start && todayDay<=t.end).start;
+    const bg=pastTripsBefore(merged, entry);
+    maxExitDay=computeMaxExit(bg, entry);
+    remaining=Math.max(0, maxExitDay - todayDay +1);
+    maxExitStr=`до ${fmtHuman(maxExitDay)} — ${remaining} дн. вкл. сегодня`;
+  }else{
+    if(canEnterOn(merged, todayDay)){
+      maxExitDay=computeMaxExit(merged, todayDay);
+      remaining=Math.max(0, maxExitDay - todayDay +1);
+      maxExitStr=`въезд сегодня → до ${fmtHuman(maxExitDay)} (${remaining} дн.)`;
+    }else{maxExitStr='въезд сегодня невозможен (90/180)';}
+  }
+  const openTrip=state[p].trips.some(t=>!t.end && toDayNum(t.start)!==null && toDayNum(t.start) <= todayDay);
+  const el=document.getElementById('stats'+p);
+  el.innerHTML=`
+    <div class="stat"><div class="label">Использовано на сегодня</div><div class="value ${used>=80?'warn':used>=60?'neutral':'ok'}">${used} / 90</div><div class="hint">осталось вкл. сегодня: ${remaining}${openTrip?' • открытая поездка':''}</div></div>
+    <div class="stat"><div class="label">Статус сегодня</div><div class="value ${inSchengen?'ok':'neutral'}">${inSchengen?'внутри Шенгена': 'снаружи'}${openTrip?' (открытая)':''}</div></div>
+    <div class="stat full"><div class="label">Крайний выезд — синхронизировано</div><div class="value neutral" style="font-size:13px">${maxExitStr}</div></div>
+  `;
+}
+
+// ---------- exact 90/180 per day + global optimum ----------
+function computeFixedCounts(fixedIntervals, todayDay, horizonEnd){
+  const counts={};
+  for(let d=todayDay+1; d<=horizonEnd; d++){
+    let c=0;
+    const ws=d-179;
+    for(const it of fixedIntervals){ c+=overlap(it.start,it.end,ws,d); }
+    counts[d]=c;
+  }
+  return counts;
+}
+function buildMandatoryBoolMap(mandatoryIntervals, todayDay, horizonEnd){
+  const map={};
+  for(let d=todayDay+1; d<=horizonEnd; d++) map[d]=false;
+  for(const it of mandatoryIntervals){
+    for(let d=Math.max(it.start, todayDay+1); d<=Math.min(it.end, horizonEnd); d++){
+      map[d]=true;
+    }
+  }
+  return map;
+}
+
+function findOptimalSchedule(todayDay, horizonEnd, infoA, infoB, sacrificePref, onProgress){
+  const fixedA=infoA.fixedIntervals;
+  const fixedB=infoB.fixedIntervals;
+  const mandatoryAIntervals=infoA.mandatoryIntervals;
+  const mandatoryBIntervals=infoB.mandatoryIntervals;
+
+  const fixedCountA=computeFixedCounts(fixedA, todayDay, horizonEnd);
+  const fixedCountB=computeFixedCounts(fixedB, todayDay, horizonEnd);
+  const mustA=buildMandatoryBoolMap(mandatoryAIntervals, todayDay, horizonEnd);
+  const mustB=buildMandatoryBoolMap(mandatoryBIntervals, todayDay, horizonEnd);
+
+  // quick infeasibility check for mandatory trips alone (without coverage)
+  for(let d=todayDay+1; d<=horizonEnd; d++){
+    if(mustA[d] && mustB[d]){
+      // need Both, check both feasible with only fixed counts (var=0)
+      // But var may be >0 from previous mandatory days, so need to simulate
+    }
+  }
+
+  // initial greedy feasible to get lower bound
+  let bestTogether=-1;
+  let bestSchedA=null, bestSchedB=null;
+  let bestTrips=Infinity;
+  let bestPriorityInside=-1;
+  let bestSeparationBlocks=Infinity;
+  let timedOut=false;
+  let memo=new Map();
+  let nodes=0;
+  let startTime=performance.now();
+  const timeLimit=8000; // ms
+
+  // current path
+  let curQueueA=[], curQueueB=[];
+  let curSchedA={}, curSchedB={}; // map day->bool
+  let curTogether=0;
+
+  // helper to compute varCount = queue length (since queue contains only days within window)
+  // queue invariant: contains variable presence days in [day-179, day-1]
+  function nextQueue(queue, day, present){
+    // queue for current day D contains [D-179, D-1]
+    // for next day D+1 need [D-178, D]
+    let filtered=queue.filter(d=> d >= day-178);
+    if(present) filtered.push(day);
+    return filtered;
+  }
+
+  function pathMetrics(schedA, schedB){
+    let trips=0, priorityInside=0, separationBlocks=0;
+    let prevA=infoA.isPresentToday, prevB=infoB.isPresentToday;
+    let prevSeparated=(prevA!==prevB);
+    for(let d=todayDay+1; d<=horizonEnd; d++){
+      const a=!!schedA[d], b=!!schedB[d];
+      if(a && !prevA) trips++;
+      if(b && !prevB) trips++;
+      if(sacrificePref==='B' && a) priorityInside++;
+      else if(sacrificePref==='A' && b) priorityInside++;
+      const separated=(a!==b);
+      if(separated && !prevSeparated) separationBlocks++;
+      prevSeparated=separated; prevA=a; prevB=b;
+    }
+    return {trips,priorityInside,separationBlocks};
+  }
+  function betterScore(together, metrics){
+    if(together!==bestTogether) return together>bestTogether;
+    if(metrics.priorityInside!==bestPriorityInside) return metrics.priorityInside>bestPriorityInside;
+    if(metrics.trips!==bestTrips) return metrics.trips<bestTrips;
+    return metrics.separationBlocks<bestSeparationBlocks;
+  }
+
+  // greedy to get initial best
+  (function greedyInit(){
+    let qA=[], qB=[], together=0;
+    let schedA={}, schedB={};
+    for(let d=todayDay+1; d<=horizonEnd; d++){
+      const fcA=fixedCountA[d], fcB=fixedCountB[d];
+      const varA=qA.length, varB=qB.length;
+      const mA=mustA[d], mB=mustB[d];
+      // check feasibility for each possible present
+      const canA = fcA + varA +1 <=90;
+      const canB = fcB + varB +1 <=90;
+      const canAAbsent = fcA + varA <=90;
+      const canBAbsent = fcB + varB <=90;
+      if(!canAAbsent || !canBAbsent){
+        // even absent violates -> no feasible schedule at all
+        return;
+      }
+      let move=null;
+      if(mA && mB){
+        if(canA && canB) move='Both';
+      }else if(mA){
+        if(canA && canB) move='Both';
+        else if(canA) move='A';
+      }else if(mB){
+        if(canA && canB) move='Both';
+        else if(canB) move='B';
+      }else{
+        if(canA && canB) move='Both';
+        else if(canA && (sacrificePref==='B' || sacrificePref==='auto')) move='A';
+        else if(canB) move='B';
+        else if(canA) move='A';
+      }
+      // hard constraint both outside forbidden: if move null, try to find any feasible with at least one
+      if(!move){
+        if(canA) move='A';
+        else if(canB) move='B';
+        else return; // infeasible
+      }
+      // check absent side feasibility
+      if(move==='Both'){
+        if(!canA || !canB) { /* try fallback */ }
+      }else if(move==='A'){
+        if(!canA || !canBAbsent) {
+          if(canB && !mA) move='B';
+          else return;
+        }
+      }else if(move==='B'){
+        if(!canB || !canAAbsent){
+          if(canA && !mB) move='A';
+          else return;
+        }
+      }
+      // apply
+      const presentA = move==='A' || move==='Both';
+      const presentB = move==='B' || move==='Both';
+      schedA[d]=presentA; schedB[d]=presentB;
+      if(presentA && presentB) together++;
+      qA=nextQueue(qA,d,presentA);
+      qB=nextQueue(qB,d,presentB);
+    }
+    bestTogether=together;
+    bestSchedA={...schedA};
+    bestSchedB={...schedB};
+    const gm=pathMetrics(schedA,schedB);
+    bestTrips=gm.trips;
+    bestPriorityInside=gm.priorityInside;
+    bestSeparationBlocks=gm.separationBlocks;
+  })();
+
+  // DFS with memo and pruning
+  function dfs(day, qA, qB, together){
+    nodes++;
+    if(nodes % 2000 ===0 && onProgress){
+      onProgress({day, together, bestTogether, nodes, elapsed: performance.now()-startTime});
+      if(performance.now()-startTime > timeLimit){ timedOut=true; return true; } // timeout signal
+    }
+    if(day > horizonEnd){
+      // leaf
+      const metrics=pathMetrics(curSchedA,curSchedB);
+      if(betterScore(together,metrics)){
+        bestTogether=together;
+        bestSchedA={...curSchedA};
+        bestSchedB={...curSchedB};
+        bestTrips=metrics.trips;
+        bestPriorityInside=metrics.priorityInside;
+        bestSeparationBlocks=metrics.separationBlocks;
+      }
+      return false;
+    }
+
+    // memo key
+    const key = day+'|'+qA.join(',')+'|'+qB.join(',');
+    const pm=pathMetrics(curSchedA,curSchedB);
+    const memoVal=memo.get(key);
+    if(memoVal){
+      const dominates = memoVal.together>together ||
+        (memoVal.together===together && memoVal.priorityInside>pm.priorityInside) ||
+        (memoVal.together===together && memoVal.priorityInside===pm.priorityInside && memoVal.trips<pm.trips) ||
+        (memoVal.together===together && memoVal.priorityInside===pm.priorityInside && memoVal.trips===pm.trips && memoVal.separationBlocks<=pm.separationBlocks);
+      if(dominates) return false;
+    }
+    memo.set(key,{together,priorityInside:pm.priorityInside,trips:pm.trips,separationBlocks:pm.separationBlocks});
+
+    // upper bound pruning
+    const remaining = horizonEnd - day +1;
+    if(together + remaining < bestTogether) return false; // cannot beat even if all Both
+    if(together + remaining === bestTogether){
+      // need to check if we can still beat on trips? For now allow, as trips tie-breaker might be better
+    }
+
+    const fcA=fixedCountA[day], fcB=fixedCountB[day];
+    const varA=qA.length, varB=qB.length;
+    const mA=mustA[day], mB=mustB[day];
+
+    // check if even absent is feasible for both (if both must be absent? but we forbid both absent)
+    const canAAbsent = fcA + varA <=90;
+    const canBAbsent = fcB + varB <=90;
+    const canA = fcA + varA +1 <=90;
+    const canB = fcB + varB +1 <=90;
+
+    // if mandatory requires presence but can* false -> dead end
+    if(mA && !canA) return false;
+    if(mB && !canB) return false;
+    // if both must be absent? not possible because we forbid both outside, but if both canAbsent true, still need at least one present, so need at least one can present
+    // also if a person is absent, need his absent feasibility
+    // For each move, we need to check both present and absent sides
+
+    let moves=[];
+    if(mA && mB){
+      if(canA && canB) moves.push('Both');
+    }else if(mA){
+      if(canA && canB) moves.push('Both');
+      if(canA && canBAbsent) moves.push('A');
+    }else if(mB){
+      if(canA && canB) moves.push('Both');
+      if(canB && canAAbsent) moves.push('B');
+    }else{
+      // no mandatory
+      if(canA && canB) moves.push('Both');
+      if(canA && canBAbsent) moves.push('A');
+      if(canB && canAAbsent) moves.push('B');
+      // order by sacrifice pref: Both first, then preferred
+      if(sacrificePref==='B'){
+        moves.sort((a,b)=>{
+          const order={Both:0,A:1,B:2};
+          return order[a]-order[b];
+        });
+      }else if(sacrificePref==='A'){
+        moves.sort((a,b)=>{
+          const order={Both:0,B:1,A:2};
+          return order[a]-order[b];
+        });
+      }
+    }
+
+    if(moves.length===0) return false; // dead end -> violates hard constraint (both outside would be needed but forbidden, or 90/180)
+
+    for(const move of moves){
+      const presentA = move==='A' || move==='Both';
+      const presentB = move==='B' || move==='Both';
+
+      // check feasibility already done partially, but double-check
+      if(presentA && !canA) continue;
+      if(!presentA && !canAAbsent) continue;
+      if(presentB && !canB) continue;
+      if(!presentB && !canBAbsent) continue;
+
+      // hard constraint both outside forbidden already ensured by moves (no None)
+
+      // apply
+      curSchedA[day]=presentA;
+      curSchedB[day]=presentB;
+      const nextQa=nextQueue(qA, day, presentA);
+      const nextQb=nextQueue(qB, day, presentB);
+      const nextTogether = together + (presentA && presentB ? 1 : 0);
+
+      const timeout = dfs(day+1, nextQa, nextQb, nextTogether);
+      if(timeout) return true;
+
+      // backtrack (curSched will be overwritten)
+      delete curSchedA[day];
+      delete curSchedB[day];
+    }
+    return false;
+  }
+
+  // start DFS from today+1
+  dfs(todayDay+1, [], [], 0);
+
+  return {
+    feasible: bestTogether>=0,
+    together: bestTogether,
+    schedA: bestSchedA,
+    schedB: bestSchedB,
+    trips: bestTrips,
+    nodes,
+    time: performance.now()-startTime,
+    optimalityProven: !timedOut,
+    priorityInside: bestPriorityInside,
+    separationBlocks: bestSeparationBlocks,
+    fixedCountA,
+    fixedCountB,
+    mustA,
+    mustB
+  };
+}
+
+// ---------- rendering ----------
+let lastResult=null;
+function renderAll(){
+  renderTrips('A'); renderTrips('B');
+  renderStats('A'); renderStats('B');
+  saveState();
+}
+
+function renderTimelineFromSchedules(todayDay, horizonEnd, infoA, infoB, result){
+  const total=horizonEnd - todayDay;
+  const fullA=[], fullB=[];
+  // build full segments for visualization: fixed + scheduled future
+  // fixed intervals
+  for(const it of infoA.fixedIntervals) fullA.push({...it});
+  for(const it of infoB.fixedIntervals) fullB.push({...it});
+  // future scheduled
+  if(result && result.feasible){
+    let curA=null, curB=null;
+    for(let d=todayDay+1; d<=horizonEnd; d++){
+      if(result.schedA[d]){
+        if(curA && curA.end===d-1) curA.end=d;
+        else {curA={start:d,end:d}; fullA.push(curA);}
+      }else curA=null;
+      if(result.schedB[d]){
+        if(curB && curB.end===d-1) curB.end=d;
+        else {curB={start:d,end:d}; fullB.push(curB);}
+      }else curB=null;
+    }
+  }
+  const mergedA=mergeTrips(fullA);
+  const mergedB=mergeTrips(fullB);
+  // render timeline
+  const tl=document.getElementById('timeline');
+  tl.innerHTML='';
+  const totalDays=horizonEnd - todayDay +1;
+  function row(label,segs,cls){
+    const r=document.createElement('div');r.className='timeline-row';r.innerHTML=`<span class="row-label">${label}</span>`;
+    segs.forEach(s=>{
+      const left=Math.max(0,(s.start - todayDay)/totalDays*100);
+      const right=Math.min(100,(s.end+1 - todayDay)/totalDays*100);
+      const w=Math.max(0.4,right-left);
+      const bar=document.createElement('div');bar.className='timeline-bar '+cls;bar.style.left=left+'%';bar.style.width=w+'%';bar.title=`${fmtDMY(s.start)} → ${fmtDMY(s.end)} (${s.end-s.start+1} дн.)`;r.appendChild(bar);
+    });
+    return r;
+  }
+  const together=[];
+  for(const a of mergedA) for(const b of mergedB){const s=Math.max(a.start,b.start), e=Math.min(a.end,b.end); if(s<=e) together.push({start:s,end:e});}
+  const togetherMerged=mergeTrips(together);
+
+  // find gaps where both outside (should be 0 if feasible)
+  const presentA=new Array(totalDays+1).fill(false);
+  const presentB=new Array(totalDays+1).fill(false);
+  for(const s of mergedA) for(let d=Math.max(s.start,todayDay); d<=Math.min(s.end,horizonEnd); d++) presentA[d-todayDay]=true;
+  for(const s of mergedB) for(let d=Math.max(s.start,todayDay); d<=Math.min(s.end,horizonEnd); d++) presentB[d-todayDay]=true;
+  const gaps=[];
+  let gs=null;
+  for(let i=0;i<=totalDays;i++){
+    const bothAbsent=!presentA[i] && !presentB[i];
+    const d=todayDay+i;
+    if(bothAbsent){ if(gs===null) gs=d; } else { if(gs!==null){gaps.push({start:gs,end:d-1}); gs=null; } }
+  }
+  if(gs!==null) gaps.push({start:gs,end:horizonEnd});
+
+  tl.appendChild(row(escapeHtml(state.A.name), mergedA, 'bar-a'));
+  tl.appendChild(row(escapeHtml(state.B.name), mergedB, 'bar-b'));
+  const bothRow=document.createElement('div');bothRow.className='timeline-row';bothRow.innerHTML=`<span class="row-label">Вместе</span>`;
+  togetherMerged.forEach(s=>{const left=(s.start - todayDay)/totalDays*100;const w=(s.end-s.start+1)/totalDays*100;const bar=document.createElement('div');bar.className='timeline-bar bar-both';bar.style.left=left+'%';bar.style.width=w+'%';bothRow.appendChild(bar);});
+  gaps.forEach(g=>{const left=(g.start - todayDay)/totalDays*100;const w=(g.end-g.start+1)/totalDays*100;const bar=document.createElement('div');bar.className='timeline-bar bar-gap';bar.style.left=left+'%';bar.style.width=w+'%';bar.title=`Оба вне ${fmtDMY(g.start)}–${fmtDMY(g.end)}`;bothRow.appendChild(bar);});
+  tl.appendChild(bothRow);
+
+  const axis=document.getElementById('timelineAxis');axis.innerHTML='';
+  const months=Math.ceil(totalDays/30);
+  for(let i=0;i<=months;i++){
+    const day=todayDay+Math.floor(i*totalDays/months);
+    if(day>horizonEnd) continue;
+    const left=(day-todayDay)/totalDays*100;
+    const tick=document.createElement('div');tick.className='axis-tick';tick.style.left=left+'%';tick.textContent=fmtHumanShort(day);
+    axis.appendChild(tick);
+  }
+
+  return {mergedA, mergedB, togetherMerged, gaps, presentA, presentB};
+}
+
+
+function renderNextActions(todayDay, horizonEnd, infoA, infoB, result){
+  const el=document.getElementById('nextActions');
+  if(!result || !result.feasible){
+    el.style.display='none';
+    el.textContent='';
+    return;
+  }
+
+  function statusAt(personInfo, sched, day){
+    if(day===todayDay) return !!personInfo.isPresentToday;
+    return !!sched[day];
+  }
+
+  const events=[];
+  for(const [key, info, sched] of [
+    ['A', infoA, result.schedA],
+    ['B', infoB, result.schedB]
+  ]){
+    let prev=statusAt(info,sched,todayDay);
+    for(let day=todayDay+1; day<=horizonEnd; day++){
+      const cur=statusAt(info,sched,day);
+      if(cur!==prev){
+        if(prev && !cur){
+          // Last counted Schengen day is day-1; that is the physical exit date.
+          events.push({day:day-1, sort:0, person:key, type:'exit'});
+        }else if(!prev && cur){
+          events.push({day, sort:1, person:key, type:'return'});
+        }
+      }
+      prev=cur;
+    }
+  }
+
+  events.sort((a,b)=>a.day-b.day || a.sort-b.sort || a.person.localeCompare(b.person));
+  const upcoming=events.filter(e=>e.day>=todayDay).slice(0,4);
+
+  let text='ЧТО ДЕЛАТЬ\n\n';
+  if(!upcoming.length){
+    text+='На выбранном горизонте поездки не требуются.\n';
+  }else{
+    upcoming.forEach((e,i)=>{
+      const who=state[e.person].name;
+      const other=state[e.person==='A'?'B':'A'].name;
+      if(e.type==='exit'){
+        text+=`${i+1}. ${who} — выехать ${fmtDMY(e.day)}.\n`;
+        text+=`   ${other} остаётся с сыном в Шенгене.\n`;
+      }else{
+        text+=`${i+1}. ${who} — вернуться ${fmtDMY(e.day)}.\n`;
+      }
+    });
+  }
+  text+=`\nПлан построен так, чтобы ни одного дня оба родителя не находились вне Шенгена и правило 90/180 соблюдалось у каждого.`;
+  el.style.display='block';
+  el.textContent=text;
+}
+
+function renderHumanResult(todayDay, horizonEnd, infoA, infoB, result){
+  const el=document.getElementById('humanResult');
+  if(!result || !result.feasible){
+    el.style.display='block';
+    el.textContent=`❌ Нет допустимого плана на ${horizonEnd-todayDay} дней с условием 0 дней оба вне.
+
+Причина: в ближайшие дни оба исчерпали лимит 90/180 и не могут находиться в Шенгене.
+Даже если один из вас будет отсутствовать, второй не может въехать из-за правила 90/180.
+
+Рекомендация: подождите пока старые дни выпадут из окна 180 дней, или уменьшите горизонт.`;
+    return;
+  }
+  // build segments for future only for human readable выезд/возвращение
+  // For each person, find future trips (scheduled) as segments from today+1 onward
+  const futureSegsA=[], futureSegsB=[];
+  let cur=null;
+  for(let d=todayDay+1; d<=horizonEnd; d++){
+    if(result.schedA[d]){
+      if(cur && cur.end===d-1) cur.end=d;
+      else {cur={start:d,end:d}; futureSegsA.push(cur);}
+    }else cur=null;
+  }
+  cur=null;
+  for(let d=todayDay+1; d<=horizonEnd; d++){
+    if(result.schedB[d]){
+      if(cur && cur.end===d-1) cur.end=d;
+      else {cur={start:d,end:d}; futureSegsB.push(cur);}
+    }else cur=null;
+  }
+
+  // For human result, we want next выезд/возвращение relative to today?
+  // If person is currently inside (isPresentToday), then next выезд is end of current continuous presence (including future scheduled)
+  // If currently outside, next въезд is start of next future segment
+
+  function nextEvents(info, futureSegs, isPresentToday){
+    // find if currently inside
+    if(isPresentToday){
+      // currently inside, so they are in a stay that started earlier and continues
+      // find when this stay ends: if futureSegs starts at today+1, then stay continues, else ends today
+      let stayEnd=todayDay;
+      if(futureSegs.length && futureSegs[0].start===todayDay+1){
+        stayEnd=futureSegs[0].end;
+        // check further contiguous? futureSegs already merged, but first segment may be continuation
+        // so выезд = stayEnd+1? Actually выезд date is day after last presence? In Schengen, day of exit counts as presence. So if last presence day is stayEnd, выезд is stayEnd+1? But we display as выезд = stayEnd+1? Let's display as Выезд: date of exit (first day outside). For simplicity, display last day inside as "до" and выезд as next day.
+        // For human format requested: Выезд: 15.10.2026 Возвращение: 12.11.2026
+        // That suggests выезд is first day outside, возвращение is first day inside again.
+        // We'll display accordingly.
+      }
+      // find next return after exit
+      let nextReturn=null;
+      if(futureSegs.length){
+        if(futureSegs[0].start===todayDay+1){
+          // stay continues, so next return is after its end
+          if(futureSegs.length>1) nextReturn=futureSegs[1].start;
+        }else{
+          // stay ends today, next return is first future seg start
+          nextReturn=futureSegs[0].start;
+        }
+      }
+      return {stayEnd, nextReturn, isPresentToday:true, futureSegs};
+    }else{
+      // currently outside
+      const nextEntry = futureSegs.length ? futureSegs[0].start : null;
+      const nextExit = futureSegs.length ? futureSegs[0].end : null;
+      return {nextEntry, nextExit, isPresentToday:false, futureSegs};
+    }
+  }
+
+  const evA=nextEvents(infoA, futureSegsA, infoA.isPresentToday);
+  const evB=nextEvents(infoB, futureSegsB, infoB.isPresentToday);
+
+  // together stats
+  const totalDays=horizonEnd - todayDay;
+  const together=result.together;
+  const gapDays=0; // by hard constraint
+  const totalA = Object.values(result.schedA).filter(Boolean).length + (infoA.isPresentToday?0:0); // actually future only
+  // For rule check, we already ensured 90/180 OK
+
+  let text='';
+  text+=`${state.A.name}\n`;
+  if(evA.isPresentToday){
+    text+=`Сейчас в Шенгене (открытая поездка с ${infoA.fixedIntervals.length? fmtDMY(infoA.fixedIntervals[infoA.fixedIntervals.length-1].start):''})\n`;
+    text+=`Выезд: ${fmtDMY(evA.stayEnd)} (этот день считается днём пребывания)\n`;
+    if(evA.nextReturn) text+=`Возвращение: ${fmtDMY(evA.nextReturn)}\n`;
+    else text+=`Возвращение: не требуется в горизонте\n`;
+  }else{
+    if(evA.nextEntry) text+=`Въезд: ${fmtDMY(evA.nextEntry)}\nВыезд: ${fmtDMY(evA.nextExit)} (день выезда считается днём пребывания)\n`;
+    else text+=`В Шенген в ближайшие ${totalDays} дней не въезжает (покрытие обеспечивает ${state.B.name})\n`;
+  }
+  if(futureSegsA.length>1){
+    text+=`Далее поездки: ${futureSegsA.slice(evA.isPresentToday && futureSegsA[0].start===todayDay+1 ? 1 : 0).map(s=> `${fmtDMY(s.start)}–${fmtDMY(s.end)}`).join(', ')}\n`;
+  }
+  text+=`\n${state.B.name}\n`;
+  if(evB.isPresentToday){
+    text+=`Сейчас в Шенгене\nВыезд: ${fmtDMY(evB.stayEnd)} (этот день считается днём пребывания)\n`;
+    if(evB.nextReturn) text+=`Возвращение: ${fmtDMY(evB.nextReturn)}\n`;
+  }else{
+    if(evB.nextEntry) text+=`Въезд: ${fmtDMY(evB.nextEntry)}\nВыезд: ${fmtDMY(evB.nextExit)} (день выезда считается днём пребывания)\n`;
+    else text+=`В Шенген в ближайшие ${totalDays} дней не въезжает\n`;
+  }
+  if(futureSegsB.length>1){
+    text+=`Далее: ${futureSegsB.slice(evB.isPresentToday && futureSegsB[0].start===todayDay+1 ? 1 : 0).map(s=> `${fmtDMY(s.start)}–${fmtDMY(s.end)}`).join(', ')}\n`;
+  }
+
+  text+=`\nРезультат\n`;
+  text+=`Вместе во Франции: ${together} дней из следующих ${totalDays}\n`;
+  text+=`Оба вне: 0 дней (hard constraint)\n`;
+  text+=`Правило 90/180 ${state.A.name}: ✅ (проверено на каждый день)\n`;
+  text+=`Правило 90/180 ${state.B.name}: ✅\n`;
+  text+=`Поиск: ${result.nodes} узлов, ${result.time.toFixed(0)} мс — ${result.optimalityProven?'глобальный оптимум доказан':'лучший найденный план, оптимальность не доказана'}\n`;
+
+  el.style.display='block';
+  el.textContent=text;
+}
+
+let lastTimelineInfo=null;
+function runOptimization(){
+  const todayDay=toDayNum(state.today);
+  if(!todayDay){alert('Неверная дата сегодня');return;}
+  const horizonDays=parseInt(document.getElementById('horizonSelect').value,10);
+  const horizonEnd=todayDay+horizonDays;
+  const sacrifice=document.getElementById('sacrificeSelect').value;
+
+  const infoA=parseTripsForPerson('A', todayDay, horizonEnd);
+  const infoB=parseTripsForPerson('B', todayDay, horizonEnd);
+
+  // check mandatory trips feasibility alone (without coverage)
+  // quick check: for each person, simulate mandatory intervals plus fixed must respect 90/180
+  function checkMandatoryFeasible(info, fixedCount){
+    // build queue for mandatory only
+    let q=[];
+    for(let d=todayDay+1; d<=horizonEnd; d++){
+      const must = info.mandatoryIntervals.some(it=> d>=it.start && d<=it.end);
+      const fc = fixedCount[d];
+      const varLen = q.filter(x=> x >= d-178).length; // actually q contains mandatory days that are within window
+      // we need to maintain q as mandatory days in window
+      // For quick check, we can simulate mandatory only
+    }
+    return true;
+  }
+
+  document.getElementById('searchStatus').textContent='🔍 Ищу глобально оптимальный план... (точный перебор по дням, только юридически допустимые варианты)';
+  document.getElementById('optimizeBtn').disabled=true;
+
+  setTimeout(()=>{
+    const result=findOptimalSchedule(todayDay, horizonEnd, infoA, infoB, sacrifice, (prog)=>{
+      document.getElementById('searchStatus').textContent=`🔍 День ${prog.day - todayDay}/${horizonDays} • лучший вместе: ${prog.bestTogether} • узлов: ${prog.nodes} • ${prog.elapsed.toFixed(0)}мс`;
+    });
+
+    lastResult=result;
+    const timelineInfo=renderTimelineFromSchedules(todayDay, horizonEnd, infoA, infoB, result);
+    lastTimelineInfo=timelineInfo;
+
+    const wbox=document.getElementById('forecastWarnings');
+    wbox.innerHTML='';
+    if(!result.feasible){
+      const d=document.createElement('div');d.className='warn-box';d.innerHTML=`<div class="t">нет допустимого плана</div><div class="d">На горизонте ${horizonDays} дней невозможно обеспечить 0 дней оба вне из-за лимита 90/180. Нужно подождать пока старые дни выпадут из окна, или уменьшить горизонт.</div>`;wbox.appendChild(d);
+    }else{
+      const d=document.createElement('div');d.className='ok-box';d.textContent=result.optimalityProven ? `✅ Глобальный оптимум доказан: оба вне =0 дней, вместе ${result.together} из ${horizonDays}. Узлов ${result.nodes}, время ${result.time.toFixed(0)}мс.` : `⚠ Найден лучший план за лимит времени: оба вне =0 дней, вместе ${result.together} из ${horizonDays}. Глобальный оптимум не доказан. Узлов ${result.nodes}, время ${result.time.toFixed(0)}мс.`;wbox.appendChild(d);
+    }
+
+    document.getElementById('forecastSummary').innerHTML=`
+      <div><div class="big">${result.feasible?result.together:'—'}</div><div class="small">дней вместе (max)</div></div>
+      <div><div class="big" style="color:var(--red)">${result.feasible?0:'—'}</div><div class="small">дней оба вне (hard 0)</div></div>
+      <div><div class="big">${horizonDays}</div><div class="small">горизонт дней</div></div>
+    `;
+
+    renderNextActions(todayDay, horizonEnd, infoA, infoB, result);
+    renderHumanResult(todayDay, horizonEnd, infoA, infoB, result);
+
+    document.getElementById('forecastExplain').innerHTML=`
+      <h4>Как искали оптимум (без эвристик)</h4>
+      <ul>
+        <li>Для каждого будущего дня D считается точное <code>used = fixedCount[D] + varQueue.length + (present?1:0)</code> — overlap на каждый календарный день, без допущений.</li>
+        <li>Ветвление: Both / A only / B only, но None запрещено (hard constraint).</li>
+        <li>Обязательные будущие поездки из ваших данных — must, проверяются на 90/180.</li>
+        <li>Memoization по (день + очереди) — если то же состояние уже достигалось с большим together, ветка отсекается.</li>
+        <li>Upper bound: together + оставшиеся дни — если не может побить лучший, отсекается.</li>
+        <li>Цели: 1) оба вне=0, 2) max вместе, 3) меньше поездок.</li>
+      </ul>
+    `;
+
+    document.getElementById('searchStatus').textContent = result.feasible ? (result.optimalityProven ? `✅ Глобальный оптимум доказан за ${result.time.toFixed(0)}мс, узлов ${result.nodes}` : `⚠ Лучший найденный план за ${result.time.toFixed(0)}мс; оптимальность не доказана, узлов ${result.nodes}`) : `❌ Допустимого плана нет`;
+
+    document.getElementById('optimizeBtn').disabled=false;
+  }, 50);
+}
+
+// ---------- events ----------
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.getElementById('todayInput').value=state.today;
+document.getElementById('todayInput').addEventListener('change',e=>{state.today=e.target.value||todayISO();renderAll();});
+document.getElementById('nameA').addEventListener('input',e=>{state.A.name=e.target.value||'A';touchState();renderAll();document.getElementById('legendA').textContent=state.A.name;});
+document.getElementById('nameB').addEventListener('input',e=>{state.B.name=e.target.value||'B';touchState();renderAll();document.getElementById('legendB').textContent=state.B.name;});
+document.querySelectorAll('.add-trip').forEach(btn=>btn.addEventListener('click',()=>{
+  const p=btn.dataset.person;
+  state[p].trips.push({start:'',end:''});
+  touchState();
+  renderAll();
+}));
+document.getElementById('cardA').addEventListener('click',e=>{if(e.target.classList.contains('rm')){const idx=+e.target.dataset.idx;state.A.trips.splice(idx,1);touchState();renderAll();}});
+document.getElementById('cardB').addEventListener('click',e=>{if(e.target.classList.contains('rm')){const idx=+e.target.dataset.idx;state.B.trips.splice(idx,1);touchState();renderAll();}});
+document.getElementById('cardA').addEventListener('change',e=>{if(e.target.tagName==='INPUT'&&e.target.dataset.field){const idx=+e.target.dataset.idx;const field=e.target.dataset.field;state.A.trips[idx][field]=e.target.value;touchState();renderAll();}});
+document.getElementById('cardB').addEventListener('change',e=>{if(e.target.tagName==='INPUT'&&e.target.dataset.field){const idx=+e.target.dataset.idx;const field=e.target.dataset.field;state.B.trips[idx][field]=e.target.value;touchState();renderAll();}});
+document.getElementById('horizonSelect').addEventListener('change',e=>{state.settings.horizon=e.target.value;touchState();saveState();});
+document.getElementById('sacrificeSelect').addEventListener('change',e=>{state.settings.sacrifice=e.target.value;touchState();saveState();});
+document.getElementById('optimizeBtn').addEventListener('click',runOptimization);
+document.getElementById('exportBtn').addEventListener('click',()=>{
+  if(!lastResult || !lastResult.feasible){alert('Сначала найдите оптимальный план');return;}
+  const todayDay=toDayNum(state.today);
+  const horizonEnd=todayDay+parseInt(document.getElementById('horizonSelect').value,10);
+  const infoA=parseTripsForPerson('A', todayDay, horizonEnd);
+  const infoB=parseTripsForPerson('B', todayDay, horizonEnd);
+  // build full trips for ics from result
+  let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Schengen v3//RU\n';
+  function addPerson(name, info, sched){
+    const all=[];
+    for(const it of info.fixedIntervals) all.push(it);
+    let cur=null;
+    for(let d=todayDay+1; d<=horizonEnd; d++){
+      if(sched[d]){
+        if(cur && cur.end===d-1) cur.end=d;
+        else {cur={start:d,end:d}; all.push(cur);}
+      }else cur=null;
+    }
+    const merged=mergeTrips(all);
+    merged.forEach(s=>{
+      const dtStart=fromDayNum(s.start).replace(/-/g,'');
+      const dtEnd=fromDayNum(s.end+1).replace(/-/g,'');
+      ics+=`BEGIN:VEVENT\nSUMMARY:${name} в Шенгене\nDTSTART;VALUE=DATE:${dtStart}\nDTEND;VALUE=DATE:${dtEnd}\nEND:VEVENT\n`;
+    });
+  }
+  addPerson(state.A.name, infoA, lastResult.schedA);
+  addPerson(state.B.name, infoB, lastResult.schedB);
+  ics+='END:VCALENDAR';
+  const blob=new Blob([ics],{type:'text/calendar'});const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`schengen-v3-optimal-${state.today}.ics`;a.click();URL.revokeObjectURL(url);
+});
+document.getElementById('explainBtn').addEventListener('click',()=>{
+  if(!lastResult || !lastResult.feasible){alert('Сначала найдите план');return;}
+  const expl=`План объясняет правило 90/180: для каждого дня считается окно 180 дней. Лена сейчас ${state.A.trips.some(t=>!t.end)?'внутри (открытая поездка)':'снаружи'}, Саша ${state.B.trips.some(t=>!t.end)?'внутри':'снаружи'}. 
+Оптимизатор перебрал ${lastResult.nodes} вариантов и выбрал тот, где вместе ${lastResult.together} дней и 0 дней оба вне.
+Жертвуем ${document.getElementById('sacrificeSelect').value==='B'?'Сашей':'Леной'} — когда Both невозможно из-за лимита, выбирается ${state.A.name}.`;
+  alert(expl);
+});
+
+document.getElementById('backupBtn').addEventListener('click',downloadBackup);
+document.getElementById('restoreBtn').addEventListener('click',()=>document.getElementById('restoreFile').click());
+document.getElementById('restoreFile').addEventListener('change',e=>{
+  const file=e.target.files && e.target.files[0];
+  if(file) restoreBackupFile(file);
+  e.target.value='';
+});
+
+
+document.getElementById('unlockBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('unlockBtn'); const err=document.getElementById('pinError');
+  err.textContent=''; btn.disabled=true;
+  try{await unlockCloud(document.getElementById('familyPin').value)}catch(e){err.textContent='Не удалось открыть: '+e.message;setCloudStatus('☁ доступ не подтверждён','err')}finally{btn.disabled=false}
+});
+document.getElementById('familyPin').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('unlockBtn').click()});
+const savedFamilyPin=localStorage.getItem(PIN_KEY);
+if(savedFamilyPin){document.getElementById('familyPin').value=savedFamilyPin;setTimeout(()=>document.getElementById('unlockBtn').click(),150)}
+
+// initial render
+renderAll();
+document.getElementById('legendA').textContent=state.A.name;
+document.getElementById('legendB').textContent=state.B.name;
+
+// auto run optimization on load for real data
+if(!document.getElementById('pinGate') || document.getElementById('pinGate').style.display==='none') setTimeout(runOptimization, 800);
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW registration failed', err));
+  });
+}
+</script>
+</body>
+</html>
