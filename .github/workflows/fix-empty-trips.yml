@@ -21,47 +21,18 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          old = """function exportCloudState(){
-  return {A:state.A,B:state.B,settings:state.settings,lastModified:state.lastModified};
-}
-function applyCloudState(s){
-  if(!s || !s.A || !s.B) return false;
-  applyingRemote=true;
-  state.A={name:s.A.name||'Лена', trips:Array.isArray(s.A.trips)?s.A.trips:[]};
-  state.B={name:s.B.name||'Саша', trips:Array.isArray(s.B.trips)?s.B.trips:[]};
-"""
-          new = """function cleanTrips(trips){
-  return (Array.isArray(trips)?trips:[]).filter(t=>t && typeof t.start==='string' && t.start.trim()!=='');
-}
-function exportCloudState(){
-  return {
-    A:{name:state.A.name,trips:cleanTrips(state.A.trips)},
-    B:{name:state.B.name,trips:cleanTrips(state.B.trips)},
-    settings:state.settings,
-    lastModified:state.lastModified
-  };
-}
-function applyCloudState(s){
-  if(!s || !s.A || !s.B) return false;
-  applyingRemote=true;
-  state.A={name:s.A.name||'Лена', trips:cleanTrips(s.A.trips)};
-  state.B={name:s.B.name||'Саша', trips:cleanTrips(s.B.trips)};
-"""
-
+          old = "function exportCloudState(){\n  return {A:state.A,B:state.B,settings:state.settings,lastModified:state.lastModified};\n}\nfunction applyCloudState(s){\n  if(!s || !s.A || !s.B) return false;\n  applyingRemote=true;\n  state.A={name:s.A.name||'Лена', trips:Array.isArray(s.A.trips)?s.A.trips:[]};\n  state.B={name:s.B.name||'Саша', trips:Array.isArray(s.B.trips)?s.B.trips:[]};\n"
+          new = "function cleanTrips(trips){\n  return (Array.isArray(trips)?trips:[]).filter(t=>t && typeof t.start==='string' && t.start.trim()!=='');\n}\nfunction exportCloudState(){\n  return {\n    A:{name:state.A.name,trips:cleanTrips(state.A.trips)},\n    B:{name:state.B.name,trips:cleanTrips(state.B.trips)},\n    settings:state.settings,\n    lastModified:state.lastModified\n  };\n}\nfunction applyCloudState(s){\n  if(!s || !s.A || !s.B) return false;\n  applyingRemote=true;\n  state.A={name:s.A.name||'Лена', trips:cleanTrips(s.A.trips)};\n  state.B={name:s.B.name||'Саша', trips:cleanTrips(s.B.trips)};\n"
           if old not in s:
               raise SystemExit('Expected sync block not found; refusing to patch')
-          s = s.replace(old, new, 1)
-          p.write_text(s, encoding='utf-8')
-
+          p.write_text(s.replace(old, new, 1), encoding='utf-8')
           sw = Path('sw.js')
           w = sw.read_text(encoding='utf-8')
-          if "schengen-pwa-v2" in w:
-              w = w.replace("schengen-pwa-v2", "schengen-pwa-v3", 1)
-          elif "schengen-pwa-v3" not in w:
+          if 'schengen-pwa-v2' in w:
+              w = w.replace('schengen-pwa-v2', 'schengen-pwa-v3', 1)
+          elif 'schengen-pwa-v3' not in w:
               raise SystemExit('Unexpected service worker cache version')
           sw.write_text(w, encoding='utf-8')
           PY
