@@ -1,0 +1,75 @@
+name: Fix empty trip sync
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-empty-trips.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Patch cloud sync and bump service worker cache
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          old = """function exportCloudState(){
+  return {A:state.A,B:state.B,settings:state.settings,lastModified:state.lastModified};
+}
+function applyCloudState(s){
+  if(!s || !s.A || !s.B) return false;
+  applyingRemote=true;
+  state.A={name:s.A.name||'Лена', trips:Array.isArray(s.A.trips)?s.A.trips:[]};
+  state.B={name:s.B.name||'Саша', trips:Array.isArray(s.B.trips)?s.B.trips:[]};
+"""
+          new = """function cleanTrips(trips){
+  return (Array.isArray(trips)?trips:[]).filter(t=>t && typeof t.start==='string' && t.start.trim()!=='');
+}
+function exportCloudState(){
+  return {
+    A:{name:state.A.name,trips:cleanTrips(state.A.trips)},
+    B:{name:state.B.name,trips:cleanTrips(state.B.trips)},
+    settings:state.settings,
+    lastModified:state.lastModified
+  };
+}
+function applyCloudState(s){
+  if(!s || !s.A || !s.B) return false;
+  applyingRemote=true;
+  state.A={name:s.A.name||'Лена', trips:cleanTrips(s.A.trips)};
+  state.B={name:s.B.name||'Саша', trips:cleanTrips(s.B.trips)};
+"""
+
+          if old not in s:
+              raise SystemExit('Expected sync block not found; refusing to patch')
+          s = s.replace(old, new, 1)
+          p.write_text(s, encoding='utf-8')
+
+          sw = Path('sw.js')
+          w = sw.read_text(encoding='utf-8')
+          if "schengen-pwa-v2" in w:
+              w = w.replace("schengen-pwa-v2", "schengen-pwa-v3", 1)
+          elif "schengen-pwa-v3" not in w:
+              raise SystemExit('Unexpected service worker cache version')
+          sw.write_text(w, encoding='utf-8')
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Ignore empty trips in cloud sync"
+          git push origin main
