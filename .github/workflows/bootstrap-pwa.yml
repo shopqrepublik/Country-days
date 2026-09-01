@@ -1,0 +1,69 @@
+name: Bootstrap PWA files
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bootstrap-pwa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild app files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat payload/index.gz.b64.part* | base64 -d | gunzip > index.html
+          grep -q "okaogvrzwmrzovlvbdbm.supabase.co" index.html
+          grep -q "family_state_get" index.html
+          cat > manifest.webmanifest <<'EOF'
+          {
+            "name": "Schengen Family Planner 90/180",
+            "short_name": "Schengen",
+            "description": "Семейный калькулятор правила Шенген 90/180 для двух человек.",
+            "start_url": "./",
+            "scope": "./",
+            "display": "standalone",
+            "background_color": "#f6f2e7",
+            "theme_color": "#f6f2e7",
+            "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+          }
+          EOF
+          cat > icon.svg <<'EOF'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#f6f2e7"/><circle cx="256" cy="256" r="168" fill="none" stroke="#1c2b3a" stroke-width="28"/><path d="M156 256h200M256 156v200" stroke="#1c2b3a" stroke-width="28" stroke-linecap="round"/><circle cx="256" cy="256" r="36" fill="#2f6d52"/></svg>
+          EOF
+          cat > sw.js <<'EOF'
+          const CACHE='schengen-pwa-v2';
+          const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg'];
+          self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));self.skipWaiting();});
+          self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
+          self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{const copy=resp.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return resp;}).catch(()=>caches.match('./index.html'))));});
+          EOF
+          cat > README.md <<'EOF'
+          # Schengen Family Planner
+
+          Private family PWA for Schengen 90/180 planning.
+
+          - GitHub Pages hosts the static PWA.
+          - Supabase stores one shared family state.
+          - Access is protected by the family PIN; the PIN itself is not committed to GitHub.
+          - LocalStorage keeps an offline copy; JSON backup/restore remains available.
+          - Open devices pull newer shared data on unlock, focus/visibility, and every 15 seconds while visible.
+          EOF
+          touch .nojekyll
+          rm -rf payload
+      - name: Commit generated PWA
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Deploy Schengen PWA with Supabase sync"
+          git push
