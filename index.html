@@ -344,14 +344,22 @@ async function rpc(name, payload){
   }
   return data;
 }
+function cleanTrips(trips){
+  return (Array.isArray(trips)?trips:[]).filter(t=>t && typeof t.start==='string' && t.start.trim()!=='');
+}
 function exportCloudState(){
-  return {A:state.A,B:state.B,settings:state.settings,lastModified:state.lastModified};
+  return {
+    A:{name:state.A.name,trips:cleanTrips(state.A.trips)},
+    B:{name:state.B.name,trips:cleanTrips(state.B.trips)},
+    settings:state.settings,
+    lastModified:state.lastModified
+  };
 }
 function applyCloudState(s){
   if(!s || !s.A || !s.B) return false;
   applyingRemote=true;
-  state.A={name:s.A.name||'Лена', trips:Array.isArray(s.A.trips)?s.A.trips:[]};
-  state.B={name:s.B.name||'Саша', trips:Array.isArray(s.B.trips)?s.B.trips:[]};
+  state.A={name:s.A.name||'Лена', trips:cleanTrips(s.A.trips)};
+  state.B={name:s.B.name||'Саша', trips:cleanTrips(s.B.trips)};
   state.settings={horizon:String(s.settings?.horizon||'180'), sacrifice:s.settings?.sacrifice||'B'};
   state.lastModified=s.lastModified||nowISO();
   state.today=todayISO();
